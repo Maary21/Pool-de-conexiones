@@ -3,15 +3,18 @@
  */
 package mx.com.baz.poolconnsql.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.jcp.xml.dsig.internal.dom.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.GenericResponse;
+import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
 import mx.com.baz.poolconnsql.service.IExecuteService;
 
 import static mx.com.baz.poolconnsql.utils.Constant.SEPARADOR;
@@ -74,6 +79,36 @@ public class queryExecuteController {
 					log.info(SEPARADOR);
 				});
 	}
+
+		/**
+	 * Método efectúa la consulta de los SPEI ALNOVA genéricos.
+	 * 
+	 * @param query contiene la sentencia para la consulta SPEI ALNOVA
+	 * @return el resultado de la consulta de los SPEI ALNOVA genéricos
+	 */
+	@PostMapping(path="/own/keyvalue", 
+			consumes = MediaType.APPLICATION_JSON_VALUE, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Mono<ResponseEntity<GenericResponse<ArrayList<PLKeyValueResponse>>>> getParameterKeyValue(@RequestBody PlKeyValueRequest request ) {
+		log.info(SEPARADOR);
+		log.info("SE INICIALIZA EL ENDPOINT DE CONSULTAS DE PARAMETROS A NUESTRA BASE DE DATOS");
+		log.info(SEPARADOR);
+		return service.getKeyValue(request)
+				/**
+				 * Cuando obtenemos la respuesta se contruye la respuesta
+				 */
+				.map(q -> new ResponseEntity<>(new GenericResponse<>(200, "consulta correcta", q), HttpStatus.OK))
+				/**
+				 * Cuenta se completa la accion u ocurre un error
+				 * se recibe la señal y se pintan los logs
+				 */
+				.doFinally(signalType -> {
+					log.info(SEPARADOR);
+					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
+					log.info(SEPARADOR);
+				});
+	}
+	
 	/**
 	 * Método efectúa la consulta de los SPEI ALNOVA genéricos.
 	 * 

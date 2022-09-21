@@ -29,10 +29,13 @@ public class DataSourceOwnConfig {
 	
 	static {
 		config = new HikariConfig();
-		String connectionUrl = "jdbc:oracle:thin:@10.82.29.12:1522:godesa";
+		//String connectionUrl = "jdbc:oracle:thin:@10.82.56.210:4410:EOBDDes";
+		String connectionUrl = "jdbc:oracle:thin:@//localhost:1521/XEPDB1";
 		config.setJdbcUrl(connectionUrl);
-		config.setUsername("PREPROD_GODESA");
-		config.setPassword("admi");
+//		config.setUsername("USRADMINDES");
+//		config.setPassword("USRADNg39jK12Jo");
+		config.setUsername("GAIA_IN");
+		config.setPassword("password");
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", "250");
 		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
