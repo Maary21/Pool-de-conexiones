@@ -3,27 +3,19 @@
  */
 package mx.com.baz.poolconnsql.dao;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.jdbc.core.CallableStatementCallback;
-import org.springframework.jdbc.core.CallableStatementCreator;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 
-import lombok.extern.log4j.Log4j2;
-//import mx.com.baz.poolconnsql.config.DataSourceOwnConfig;
 import mx.com.baz.poolconnsql.config.DataSourceOwnConfig;
 import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
-import oracle.jdbc.OracleConnection;
 import reactor.core.publisher.Mono;
 
 /**
@@ -34,12 +26,10 @@ import reactor.core.publisher.Mono;
  * @created xx ago. 2022
  * @version 1.0
  */
-@Log4j2
 @Repository
 public class ExeSentenceOwnDAO {
 	public String DATABASE_SCHEMA	= "{ ? = call PREPROD_GODESA.";
 	public String FN_GET_CATALOGUE	= "FNGOCATALOGOS(?,?)";
-	private int CURSOR_TYPE			= oracle.jdbc.OracleTypes.CURSOR;
 	
 	public Mono<Map<String, String>> getCatalogue(/*String idGeneral*/) {
 //		String idGeneral = "42";
@@ -81,23 +71,30 @@ public class ExeSentenceOwnDAO {
 
 	public ArrayList<?> getKeyValue(PlKeyValueRequest request) {
 		try {
-			
-			SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withFunctionName("GET_DATA_KEY_VALUE");
-
+			SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withFunctionName("FN_GET_DATA_KEY_VALUE");
 			SqlParameterSource in = new MapSqlParameterSource().addValue("T_DATA", request.getTipoDatos())
 										.addValue("T_CON", request.getTipoCoinciliacion())
 										.addValue("ID_APP", request.getIdAplicacion());
 
 			ArrayList<?> name = jdbcCall.executeFunction(ArrayList.class, in);
-			//log.info("Resultado::: "+name.size());
 			return name;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
 	}
-
+	
+	
+	public ArrayList<?> getDataFromFunction(String nombreProcedimiento){
+		try {
+			SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withFunctionName(nombreProcedimiento);
+			SqlParameterSource in = new MapSqlParameterSource();
+			ArrayList<?> name = jdbcCall.executeFunction(ArrayList.class, in);
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

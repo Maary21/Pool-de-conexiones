@@ -8,6 +8,8 @@ import java.util.Map;
 
 import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
+import mx.com.baz.poolconnsql.model.response.Parametria;
+import mx.com.baz.poolconnsql.model.response.TcParamConc;
 import reactor.core.publisher.Mono;
 
 /**
@@ -27,6 +29,9 @@ public interface IExecuteService {
 
 
 	Mono<ArrayList<PLKeyValueResponse>> getKeyValue(PlKeyValueRequest request );
+	
+	public Mono<Parametria> obtenParametria();
+	
 	/**
 	 * 
 	 * @param query representa el script de consulta a ejecutar en base de datos

@@ -19,7 +19,6 @@ import com.zaxxer.hikari.HikariDataSource;
  * @created xx ago. 2022
  * @version 1.0
  */
-@Configuration
 public class DataSourceAztecaConfig {
 	
 	private static final HikariConfig config;
