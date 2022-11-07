@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,11 +23,9 @@ import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.GenericResponse;
 import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
 import mx.com.baz.poolconnsql.model.response.Parametria;
-import mx.com.baz.poolconnsql.model.response.TcParamConc;
 import mx.com.baz.poolconnsql.service.IExecuteService;
 
 import static mx.com.baz.poolconnsql.utils.Constant.SEPARADOR;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import reactor.core.publisher.Mono;
 
 /**
@@ -41,9 +37,8 @@ import reactor.core.publisher.Mono;
  * @version 1.0
  */
 @Slf4j
-@CrossOrigin(origins = "*" , methods = {RequestMethod.GET})
 @RestController
-@RequestMapping(value = "/api/v1/query", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/query")
 public class queryExecuteController {
 
 	/**
@@ -110,9 +105,7 @@ public class queryExecuteController {
 	}
 
 
-	@PostMapping(path="/own/parametria", 
-			consumes = MediaType.APPLICATION_JSON_VALUE, 
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path="/own/parametria")
 	public Mono<ResponseEntity<GenericResponse<Parametria>>> getTcParamConc() {
 		log.info(SEPARADOR);
 		log.info("SE INICIALIZA EL ENDPOINT DE CONSULTAS DE PARAMETROS A NUESTRA BASE DE DATOS");
