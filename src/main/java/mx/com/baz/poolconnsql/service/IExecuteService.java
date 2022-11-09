@@ -9,7 +9,7 @@ import java.util.Map;
 import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
 import mx.com.baz.poolconnsql.model.response.Parametria;
-import mx.com.baz.poolconnsql.model.response.TcParamConc;
+import mx.com.baz.poolconnsql.model.response.TcLecturaTrans;
 import reactor.core.publisher.Mono;
 
 /**
@@ -25,23 +25,24 @@ public interface IExecuteService {
 	/**
 	 * @return el resultado de la consulta de parametros
 	 */
-	Mono<Map<String, String>> getParameter();
+	public Mono<Map<String, String>> getParameter();
 
-
-	Mono<ArrayList<PLKeyValueResponse>> getKeyValue(PlKeyValueRequest request );
+	public Mono<ArrayList<PLKeyValueResponse>> getKeyValue(PlKeyValueRequest request );
 	
 	public Mono<Parametria> obtenParametria();
 	
+	public Mono<ArrayList<TcLecturaTrans>> getTcLecturaTran(Integer idConciliacion);
+	
 	/**
 	 * 
 	 * @param query representa el script de consulta a ejecutar en base de datos
 	 * @return el resultado de la consulta de la base de datos de alnova
 	 */
-	Mono<String> queryExeAlnovaSpei(String query);
+	public Mono<String> queryExeAlnovaSpei(String query);
 	/**
 	 * 
 	 * @param query representa el script de consulta a ejecutar en base de datos
 	 * @return el resultado de la consulta de la base de datos de alnova
 	 */
-	Mono<String> queryExeAztecaSpei(String query);
+	public Mono<String> queryExeAztecaSpei(String query);
 }

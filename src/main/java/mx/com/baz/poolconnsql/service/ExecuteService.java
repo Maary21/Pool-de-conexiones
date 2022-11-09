@@ -18,6 +18,7 @@ import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
 import mx.com.baz.poolconnsql.model.response.Parametria;
 import mx.com.baz.poolconnsql.model.response.TcConciliacion;
+import mx.com.baz.poolconnsql.model.response.TcLecturaTrans;
 import mx.com.baz.poolconnsql.model.response.TcOrigenes;
 import mx.com.baz.poolconnsql.model.response.TcParamConc;
 import mx.com.baz.poolconnsql.model.response.TctConexion;
@@ -164,6 +165,29 @@ public class ExecuteService implements IExecuteService {
 			responseList.add(dto);
 		}
 		return responseList;
+	}
+	
+	
+	
+	public Mono<ArrayList<TcLecturaTrans>> getTcLecturaTran(Integer idConciliacion){
+		ArrayList<?> lista = dao.getLecturaTrans(idConciliacion);
+		Iterator<?> respuesta = lista.iterator();
+		
+		ArrayList<TcLecturaTrans> responseList = new ArrayList<>();
+		while(respuesta.hasNext()) {
+			@SuppressWarnings("unchecked")
+			LinkedCaseInsensitiveMap<String> response = (LinkedCaseInsensitiveMap<String>) respuesta.next();
+			TcLecturaTrans dto = new TcLecturaTrans();
+			dto.setPkIdTransaccion(Integer.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
+			dto.setFcParseo(response.get("FCPARSEO"));
+			dto.setFcResultado(response.get("FCRESULTADO"));
+			dto.setFcNombre(response.get("FCNOMBRE"));
+			dto.setFiEstatus(response.get("FIESTATUS") != null ? Integer.valueOf(String.valueOf(response.get("FIESTATUS"))):null);
+			dto.setFkIdConciliacion(Integer.valueOf(String.valueOf(response.get("FKIDCONCILIACION"))));
+			dto.setFcFase(response.get("FCFASE"));
+			responseList.add(dto);
+		}
+		return Mono.just(responseList);
 	}
 	
 	

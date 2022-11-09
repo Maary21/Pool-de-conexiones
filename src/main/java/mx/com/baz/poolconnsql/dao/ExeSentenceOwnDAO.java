@@ -96,5 +96,18 @@ public class ExeSentenceOwnDAO {
 			return null;
 		}
 	}
+	
+	
+	public ArrayList<?> getLecturaTrans(Integer idConciliacion){
+		try {
+			SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withFunctionName("FN_TCLECTURATRAN");
+			SqlParameterSource in = new MapSqlParameterSource().addValue("T_DATA", idConciliacion);
+			ArrayList<?> name = jdbcCall.executeFunction(ArrayList.class, in);
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
