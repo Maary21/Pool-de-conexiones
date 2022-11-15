@@ -31,7 +31,7 @@ public class DataSourceOwnConfig {
 		String connectionUrl = "jdbc:oracle:thin:@10.82.56.210:4410/EOBDDes";
 		config = new HikariConfig();
 		config.setJdbcUrl(connectionUrl);
-		config.setUsername("USRADMINDES");
+		config.setUsername("ADMINDES");
 		config.setPassword("ADMADNg39jK12Jo");
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", "250");
