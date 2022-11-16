@@ -19,4 +19,5 @@ public class TcLecturaTrans {
 	private String fcFase;
 	private String fcUsrModif;
 	private Date fdFecModif;
+	private Date fdFecAlta;
 }

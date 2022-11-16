@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -152,6 +151,54 @@ public class queryExecuteController {
 				});
 	}
 	
+	
+	
+	@PostMapping(path="/own/save/tclectura",
+			consumes = MediaType.APPLICATION_JSON_VALUE, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Mono<ResponseEntity<GenericResponse<Boolean>>> saveTcLecturaTran(@RequestBody ArrayList<mx.com.baz.poolconnsql.model.response.TcLecturaTrans> request) {
+		log.info(SEPARADOR);
+		log.info("SE INICIALIZA EL ENDPOINT saveTcLecturaTran DE PARAMETROS A NUESTRA BASE DE DATOS");
+		log.info(SEPARADOR);
+		return service.saveLecturaTran(request)
+				/**
+				 * Cuando obtenemos la respuesta se contruye la respuesta
+				 */
+				.map(q -> new ResponseEntity<>(new GenericResponse<>(200, "consulta correcta", q), HttpStatus.OK))
+				/**
+				 * Cuenta se completa la accion u ocurre un error
+				 * se recibe la señal y se pintan los logs
+				 */
+				.doFinally(signalType -> {
+					log.info(SEPARADOR);
+					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
+					log.info(SEPARADOR);
+				});
+	}
+	
+	
+	@PostMapping(path="/own/update/tclectura",
+			consumes = MediaType.APPLICATION_JSON_VALUE, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Mono<ResponseEntity<GenericResponse<Boolean>>> updateTcLecturaTran(@RequestBody ArrayList<mx.com.baz.poolconnsql.model.response.TcLecturaTrans> request) {
+		log.info(SEPARADOR);
+		log.info("SE INICIALIZA EL ENDPOINT saveTcLecturaTran DE PARAMETROS A NUESTRA BASE DE DATOS");
+		log.info(SEPARADOR);
+		return service.saveLecturaTran(request)
+				/**
+				 * Cuando obtenemos la respuesta se contruye la respuesta
+				 */
+				.map(q -> new ResponseEntity<>(new GenericResponse<>(200, "consulta correcta", q), HttpStatus.OK))
+				/**
+				 * Cuenta se completa la accion u ocurre un error
+				 * se recibe la señal y se pintan los logs
+				 */
+				.doFinally(signalType -> {
+					log.info(SEPARADOR);
+					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
+					log.info(SEPARADOR);
+				});
+	}
 	
 	/**
 	 * Método efectúa la consulta de los SPEI ALNOVA genéricos.

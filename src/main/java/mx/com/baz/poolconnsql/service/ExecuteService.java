@@ -9,8 +9,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
+import lombok.extern.slf4j.Slf4j;
 import mx.com.baz.poolconnsql.dao.ExeSentenceAnvDAO;
 import mx.com.baz.poolconnsql.dao.ExeSentenceAztDAO;
 import mx.com.baz.poolconnsql.dao.ExeSentenceOwnDAO;
@@ -33,6 +35,7 @@ import reactor.core.publisher.Mono;
  * @version 1.0
  */
 @Service
+@Slf4j
 public class ExecuteService implements IExecuteService {
 	/**
 	 * Inyecta un {@link ExeSentenceAnvDAO} bean
@@ -204,7 +207,30 @@ public class ExecuteService implements IExecuteService {
 	}
 	
 	
+	@Transactional(rollbackFor = Exception.class)
+	public Mono<Boolean> saveLecturaTran(ArrayList<TcLecturaTrans> in) {
+		Boolean resultado = false; 
+		try {
+			resultado = dao.saveLecturaTran(in);
+		} catch (Exception e) {
+			log.error("saveLecturaTran",e);
+			resultado = false;
+		}
+		return Mono.just(resultado);
+	}
 	
+	@Transactional(rollbackFor = Exception.class)
+	public Mono<Boolean> updateLecturaTran(ArrayList<TcLecturaTrans> in) {
+		Boolean resultado = false; 
+		try {
+			dao.updateLecturaTran(in);
+			resultado = true;
+		} catch (Exception e) {
+			log.error("saveLecturaTran",e);
+			resultado = false;
+		}
+		return Mono.just(resultado);
+	}
 	
 	/**
 	 * @param query representa el script de consulta a ejecutar en base de datos

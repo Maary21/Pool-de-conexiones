@@ -33,6 +33,10 @@ public interface IExecuteService {
 	
 	public Mono<ArrayList<TcLecturaTrans>> getTcLecturaTran(Integer idConciliacion);
 	
+	public Mono<Boolean> saveLecturaTran(ArrayList<TcLecturaTrans> in);
+	
+	public Mono<Boolean> updateLecturaTran(ArrayList<TcLecturaTrans> in);
+	
 	/**
 	 * 
 	 * @param query representa el script de consulta a ejecutar en base de datos

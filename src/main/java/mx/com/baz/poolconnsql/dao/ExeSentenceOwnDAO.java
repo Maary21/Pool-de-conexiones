@@ -4,8 +4,10 @@
 package mx.com.baz.poolconnsql.dao;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,9 +15,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-
+import lombok.extern.slf4j.Slf4j;
 import mx.com.baz.poolconnsql.config.DataSourceOwnConfig;
 import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
+import mx.com.baz.poolconnsql.model.response.TcLecturaTrans;
 import reactor.core.publisher.Mono;
 
 /**
@@ -27,6 +30,7 @@ import reactor.core.publisher.Mono;
  * @version 1.0
  */
 @Repository
+@Slf4j
 public class ExeSentenceOwnDAO {
 	public String DATABASE_SCHEMA	= "{ ? = call PREPROD_GODESA.";
 	public String FN_GET_CATALOGUE	= "FNGOCATALOGOS(?,?)";
@@ -107,6 +111,49 @@ public class ExeSentenceOwnDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	
+	public Boolean saveLecturaTran(List<TcLecturaTrans> dataList){
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			
+			for(TcLecturaTrans data:dataList) {
+				String fecha = sdf.format(data.getFdFecAlta());
+				SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withProcedureName("SP_INS_TCLECTURATRAN");
+				SqlParameterSource in = new MapSqlParameterSource().addValue("C_FCPARSEO", data.getFcParseo())
+				.addValue("C_FCRESULTADO", data.getFcResultado())
+				.addValue("C_FCNOMBRE", data.getFcNombre())
+				.addValue("C_FIESTATUS", data.getFiEstatus())
+				.addValue("C_FKIDCONCILIACION", data.getFkIdConciliacion())
+				.addValue("C_FCUSRMODIF", data.getFcUsrModif())
+				.addValue("C_FDFECALTA", fecha);
+				jdbcCall.execute(in);
+			}
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	public Boolean updateLecturaTran(List<TcLecturaTrans> dataList){
+		try {
+			for(TcLecturaTrans data:dataList) {
+				SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withProcedureName("SP_UPD_TCLECTURATRAN");
+				SqlParameterSource in = new MapSqlParameterSource().addValue("C_PKIDTRANSACCION", data.getFcParseo())
+				.addValue("C_FKIDCONCILIACION", data.getFkIdConciliacion());
+				jdbcCall.execute(in);
+				log.info("Resultado: ");
+			}
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
