@@ -171,7 +171,7 @@ public class queryExecuteController {
 				 */
 				.doFinally(signalType -> {
 					log.info(SEPARADOR);
-					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
+					log.info("SE FINALIZA EL ENDPOINT DE saveTcLecturaTran");
 					log.info(SEPARADOR);
 				});
 	}
@@ -182,9 +182,9 @@ public class queryExecuteController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Mono<ResponseEntity<GenericResponse<Boolean>>> updateTcLecturaTran(@RequestBody ArrayList<mx.com.baz.poolconnsql.model.response.TcLecturaTrans> request) {
 		log.info(SEPARADOR);
-		log.info("SE INICIALIZA EL ENDPOINT saveTcLecturaTran DE PARAMETROS A NUESTRA BASE DE DATOS");
+		log.info("SE INICIALIZA EL ENDPOINT updateTcLecturaTran DE PARAMETROS A NUESTRA BASE DE DATOS");
 		log.info(SEPARADOR);
-		return service.saveLecturaTran(request)
+		return service.updateLecturaTran(request)
 				/**
 				 * Cuando obtenemos la respuesta se contruye la respuesta
 				 */
@@ -195,7 +195,7 @@ public class queryExecuteController {
 				 */
 				.doFinally(signalType -> {
 					log.info(SEPARADOR);
-					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
+					log.info("SE FINALIZA EL ENDPOINT DE updateTcLecturaTran");
 					log.info(SEPARADOR);
 				});
 	}

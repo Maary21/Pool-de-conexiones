@@ -144,10 +144,10 @@ public class ExeSentenceOwnDAO {
 		try {
 			for(TcLecturaTrans data:dataList) {
 				SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withProcedureName("SP_UPD_TCLECTURATRAN");
-				SqlParameterSource in = new MapSqlParameterSource().addValue("C_PKIDTRANSACCION", data.getFcParseo())
+				SqlParameterSource in = new MapSqlParameterSource().addValue("C_PKIDTRANSACCION", data.getPkIdTransaccion())
 				.addValue("C_FKIDCONCILIACION", data.getFkIdConciliacion());
 				jdbcCall.execute(in);
-				log.info("Resultado: ");
+				log.debug("data.getPkIdTransaccion()): "+data.getPkIdTransaccion()+ "  data.getFkIdConciliacion()  "+ data.getFkIdConciliacion() );
 			}
 			
 			return true;
