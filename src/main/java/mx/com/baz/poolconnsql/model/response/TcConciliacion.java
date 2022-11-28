@@ -22,5 +22,5 @@ public class TcConciliacion {
 	private String fcUsrModif;
 	private Date fdFecModif;
 	private String fcTipoCon;
-	
+	private String fcDateMask;
 }

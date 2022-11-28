@@ -3,6 +3,7 @@
  */
 package mx.com.baz.poolconnsql.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -115,11 +117,11 @@ public class ExeSentenceOwnDAO {
 	}
 	
 	
-	public Boolean saveLecturaTran(List<TcLecturaTrans> dataList){
+	public Boolean saveLecturaTran(TcLecturaTrans data){
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			
-			for(TcLecturaTrans data:dataList) {
+			//for(TcLecturaTrans data:dataList) {
 				String fecha = sdf.format(data.getFdFecAlta());
 				SimpleJdbcCall jdbcCall = new SimpleJdbcCall(DataSourceOwnConfig.getDataSource()).withProcedureName("SP_INS_TCLECTURATRAN");
 				SqlParameterSource in = new MapSqlParameterSource().addValue("C_FCPARSEO", data.getFcParseo())
@@ -128,9 +130,10 @@ public class ExeSentenceOwnDAO {
 				.addValue("C_FIESTATUS", data.getFiEstatus())
 				.addValue("C_FKIDCONCILIACION", data.getFkIdConciliacion())
 				.addValue("C_FCUSRMODIF", data.getFcUsrModif())
-				.addValue("C_FDFECALTA", fecha);
+				.addValue("C_FDFECALTA", fecha)
+				.addValue("C_FIORIGENINFO", data.getFiOrigenInfo());
 				jdbcCall.execute(in);
-			}
+			//}
 			
 			return true;
 		} catch (Exception e) {
@@ -138,8 +141,6 @@ public class ExeSentenceOwnDAO {
 			return false;
 		}
 	}
-	
-	
 	public Boolean updateLecturaTran(List<TcLecturaTrans> dataList){
 		try {
 			for(TcLecturaTrans data:dataList) {
@@ -156,5 +157,58 @@ public class ExeSentenceOwnDAO {
 			return false;
 		}
 	}
+	
+	
+	
+	public Boolean saveLecturaTranBatch(List<TcLecturaTrans> dataList) {
+		 try {
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSourceOwnConfig.getDataSource());
+			jdbcTemplate.batchUpdate(" INSERT INTO TCLECTURATRAN (PKIDTRANSACCION,FCPARSEO,FCRESULTADO,FCNOMBRE,FIESTATUS,FKIDCONCILIACION,FCFASE,FCUSRMODIF,FDFECMODIF,FDFECALTA, FIORIGENINFO) "
+					+ " SELECT id_tran_seq.NEXTVAL,?,?,?,?,?,FN_AVANCE_INIT(?),?,?,?,? FROM DUAL ",dataList, 100, (PreparedStatement ps, TcLecturaTrans dto) -> {
+		          ps.setString(1, dto.getFcParseo());
+		          ps.setString(2, dto.getFcResultado());
+		          ps.setString(3, dto.getFcNombre());
+		          if(dto.getFiEstatus()!=null)
+		        	  ps.setInt(4, dto.getFiEstatus());
+		          else
+		        	  ps.setString(4, null);
+		          ps.setInt(5, dto.getFkIdConciliacion());
+		          ps.setInt(6, dto.getFkIdConciliacion());
+		          ps.setString(7, dto.getFcUsrModif());
+		          ps.setDate(8, new java.sql.Date(dto.getFdFecModif().getTime()));
+		          ps.setDate(9, new java.sql.Date(dto.getFdFecAlta().getTime()));
+		          ps.setInt(10, dto.getFiOrigenInfo());
+		        });	
+			return true;
+		} catch (SQLException e) {
+			log.error("saveLecturaTranBatch: ", e);
+			return false;
+		}
+	}
+	
+	
+	public Boolean updateLecturaTranBatch(List<TcLecturaTrans> dataList) {
+		JdbcTemplate jdbcTemplate;
+		try {
+			jdbcTemplate = new JdbcTemplate(DataSourceOwnConfig.getDataSource());
+			jdbcTemplate.batchUpdate(" UPDATE TCLECTURATRAN "
+					+ "	SET FCFASE = FN_AVANCE_CHAR(?) "
+					+ "	WHERE PKIDTRANSACCION = ?;",dataList, 100, (PreparedStatement ps, TcLecturaTrans dto) -> {
+		          ps.setInt(1, dto.getFkIdConciliacion());
+		          ps.setInt(2, dto.getPkIdTransaccion());
+		        });	
+			return true;
+		} catch (SQLException e) {
+			log.error("updateLecturaTranBatch: ", e);
+			return false;
+		}
+		
+		
+		
+	}
+	
+	
+	
 
 }
+

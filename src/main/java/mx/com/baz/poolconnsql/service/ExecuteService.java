@@ -124,6 +124,7 @@ public class ExecuteService implements IExecuteService {
 			dto.setFcResultMod(response.get("FCRESULTMOD"));
 			dto.setFcRequerimiento(response.get("FCREQUERIMIENTO"));
 			dto.setFcTipoCon(response.get("FCTIPOCON"));
+			dto.setFcDateMask(response.get("FCDATEMASK"));
 			responseList.add(dto);
 		}
 		return responseList;
@@ -211,7 +212,7 @@ public class ExecuteService implements IExecuteService {
 	public Mono<Boolean> saveLecturaTran(ArrayList<TcLecturaTrans> in) {
 		Boolean resultado = false; 
 		try {
-			resultado = dao.saveLecturaTran(in);
+			resultado = dao.saveLecturaTranBatch(in);
 		} catch (Exception e) {
 			log.error("saveLecturaTran",e);
 			resultado = false;
@@ -223,7 +224,7 @@ public class ExecuteService implements IExecuteService {
 	public Mono<Boolean> updateLecturaTran(ArrayList<TcLecturaTrans> in) {
 		Boolean resultado = false; 
 		try {
-			dao.updateLecturaTran(in);
+			dao.updateLecturaTranBatch(in);
 			resultado = true;
 		} catch (Exception e) {
 			log.error("saveLecturaTran",e);

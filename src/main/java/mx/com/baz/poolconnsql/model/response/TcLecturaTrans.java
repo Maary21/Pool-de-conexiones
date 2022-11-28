@@ -20,4 +20,6 @@ public class TcLecturaTrans {
 	private String fcUsrModif;
 	private Date fdFecModif;
 	private Date fdFecAlta;
+	
+	private Integer fiOrigenInfo;
 }
