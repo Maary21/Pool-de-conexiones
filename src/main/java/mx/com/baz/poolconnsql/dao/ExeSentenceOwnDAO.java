@@ -193,7 +193,7 @@ public class ExeSentenceOwnDAO {
 			jdbcTemplate = new JdbcTemplate(DataSourceOwnConfig.getDataSource());
 			jdbcTemplate.batchUpdate(" UPDATE TCLECTURATRAN "
 					+ "	SET FCFASE = FN_AVANCE_CHAR(?) "
-					+ "	WHERE PKIDTRANSACCION = ?;",dataList, 100, (PreparedStatement ps, TcLecturaTrans dto) -> {
+					+ "	WHERE PKIDTRANSACCION = ?",dataList, 100, (PreparedStatement ps, TcLecturaTrans dto) -> {
 		          ps.setInt(1, dto.getFkIdConciliacion());
 		          ps.setInt(2, dto.getPkIdTransaccion());
 		        });	
@@ -202,9 +202,6 @@ public class ExeSentenceOwnDAO {
 			log.error("updateLecturaTranBatch: ", e);
 			return false;
 		}
-		
-		
-		
 	}
 	
 	
