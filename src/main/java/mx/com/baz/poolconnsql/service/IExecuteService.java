@@ -4,8 +4,10 @@
 package mx.com.baz.poolconnsql.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import mx.com.baz.model.Cabecero;
 import mx.com.baz.poolconnsql.model.request.PlKeyValueRequest;
 import mx.com.baz.poolconnsql.model.response.PLKeyValueResponse;
 import mx.com.baz.poolconnsql.model.response.Parametria;
@@ -31,7 +33,7 @@ public interface IExecuteService {
 	
 	public Mono<Parametria> obtenParametria();
 	
-	public Mono<ArrayList<TcLecturaTrans>> getTcLecturaTran(Integer idConciliacion);
+	public List<Cabecero> getTcLecturaTran(Integer idConciliacion);
 	
 	public Mono<Boolean> saveLecturaTran(ArrayList<TcLecturaTrans> in);
 	

@@ -4,6 +4,7 @@
 package mx.com.baz.poolconnsql.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,24 +132,22 @@ public class queryExecuteController {
 	@PostMapping(path="/own/tclectura",
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Mono<ResponseEntity<GenericResponse<ArrayList<mx.com.baz.poolconnsql.model.response.TcLecturaTrans>>>> getTcLecturaTran(@RequestBody TcLecturaTrans request) {
+	public ResponseEntity<GenericResponse<List<mx.com.baz.model.Cabecero>>> getTcLecturaTran(@RequestBody TcLecturaTrans request) {
 		log.info(SEPARADOR);
-		log.info("SE INICIALIZA EL ENDPOINT DE CONSULTAS DE PARAMETROS A NUESTRA BASE DE DATOS");
+		log.info("SE INICIALIZA EL ENDPOINT DE CONSULTAS DE getTcLecturaTran");
 		log.info(SEPARADOR);
-		return service.getTcLecturaTran(request.getIdConciliacion())
-				/**
-				 * Cuando obtenemos la respuesta se contruye la respuesta
-				 */
-				.map(q -> new ResponseEntity<>(new GenericResponse<>(200, "consulta correcta", q), HttpStatus.OK))
-				/**
-				 * Cuenta se completa la accion u ocurre un error
-				 * se recibe la señal y se pintan los logs
-				 */
-				.doFinally(signalType -> {
-					log.info(SEPARADOR);
-					log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS A BASE DE DATOS ALNOVA");
-					log.info(SEPARADOR);
-				});
+		
+		
+		
+		
+		
+		GenericResponse<List<mx.com.baz.model.Cabecero>> response = new GenericResponse<>(200, "consulta correcta", service.getTcLecturaTran(request.getIdConciliacion()));
+		
+		log.info(SEPARADOR);
+		log.info("SE FINALIZA EL ENDPOINT DE CONSULTAS DE getTcLecturaTran");
+		log.info(SEPARADOR);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
 	}
 	
 	

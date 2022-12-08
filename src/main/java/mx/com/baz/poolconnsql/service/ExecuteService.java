@@ -5,6 +5,7 @@ package mx.com.baz.poolconnsql.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 
+import com.google.gson.Gson;
+
 import lombok.extern.slf4j.Slf4j;
+import mx.com.baz.model.Cabecero;
+import mx.com.baz.model.CabeceroKey;
+import mx.com.baz.model.CabeceroOracle;
 import mx.com.baz.poolconnsql.dao.ExeSentenceAnvDAO;
 import mx.com.baz.poolconnsql.dao.ExeSentenceAztDAO;
 import mx.com.baz.poolconnsql.dao.ExeSentenceOwnDAO;
@@ -173,25 +179,36 @@ public class ExecuteService implements IExecuteService {
 	
 	
 	
-	public Mono<ArrayList<TcLecturaTrans>> getTcLecturaTran(Integer idConciliacion){
+	public List<Cabecero> getTcLecturaTran(Integer idConciliacion){
 		ArrayList<?> lista = dao.getLecturaTrans(idConciliacion);
+		log.info("Se obtienen de getTcLecturaTran: "+lista.size());
 		Iterator<?> respuesta = lista.iterator();
 		
-		ArrayList<TcLecturaTrans> responseList = new ArrayList<>();
+		List<Cabecero> listaCabecero = new ArrayList<>();
+		Gson gson = new Gson(); 
+		log.info("Se prepara la respuesta");
 		while(respuesta.hasNext()) {
 			@SuppressWarnings("unchecked")
 			LinkedCaseInsensitiveMap<String> response = (LinkedCaseInsensitiveMap<String>) respuesta.next();
-			TcLecturaTrans dto = new TcLecturaTrans();
-			dto.setPkIdTransaccion(Integer.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
-			dto.setFcParseo(response.get("FCPARSEO"));
-			dto.setFcResultado(response.get("FCRESULTADO"));
-			dto.setFcNombre(response.get("FCNOMBRE"));
-			dto.setFiEstatus(response.get("FIESTATUS") != null ? Integer.valueOf(String.valueOf(response.get("FIESTATUS"))):null);
-			dto.setFkIdConciliacion(Integer.valueOf(String.valueOf(response.get("FKIDCONCILIACION"))));
-			dto.setFcFase(response.get("FCFASE"));
-			responseList.add(dto);
+			
+			CabeceroOracle cabeceroOracle = gson.fromJson(response.get("FCPARSEO"), CabeceroOracle.class);
+			Cabecero cabecero = convierteCabecero(cabeceroOracle);
+			cabecero.setIdTransaccion(Long.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
+			cabecero.setProcesado("N");
+			listaCabecero.add(cabecero);
+			
+//			TcLecturaTrans dto = new TcLecturaTrans();
+//			dto.setPkIdTransaccion(Integer.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
+//			dto.setFcParseo(response.get("FCPARSEO"));
+//			dto.setFcResultado(response.get("FCRESULTADO"));
+//			dto.setFcNombre(response.get("FCNOMBRE"));
+//			dto.setFiEstatus(response.get("FIESTATUS") != null ? Integer.valueOf(String.valueOf(response.get("FIESTATUS"))):null);
+//			dto.setFkIdConciliacion(Integer.valueOf(String.valueOf(response.get("FKIDCONCILIACION"))));
+//			dto.setFcFase(response.get("FCFASE"));
+//			responseList.add(dto);
 		}
-		return Mono.just(responseList);
+		log.info("Datos preparados");
+		return listaCabecero;
 	}
 	
 	
@@ -248,6 +265,36 @@ public class ExecuteService implements IExecuteService {
 	@Override
 	public Mono<String> queryExeAztecaSpei(String query) {
 		return daoAzteca.getSpeiAzteca(query);
+	}
+	
+	
+	private Cabecero convierteCabecero(CabeceroOracle in) {
+		CabeceroKey key = new CabeceroKey();
+		Cabecero cabecero = new Cabecero();
+		key.setKeyKafka(in.getKeyKafka());
+		key.setPartitionKafka(in.getPartitionKafka());
+		
+		cabecero.setId(key);
+		
+		cabecero.setFcIdTransaccion(in.getFcIdTransaccion());
+		cabecero.setFcIdFlujo(in.getFcIdFlujo());
+		
+		cabecero.setFcConceptoPago(in.getFcConceptoPago());
+		cabecero.setFcCuentaBen(in.getFcCuentaBen());
+		cabecero.setFcCuentaOrd(in.getFcCuentaOrd());
+		cabecero.setFcInstitucion(in.getFcInstitucion());
+		cabecero.setFcNomBen(in.getFcNomBen());
+		cabecero.setFcNomOrd(in.getFcNomOrd());
+		cabecero.setFcRastreo(in.getFcRastreo());
+		cabecero.setFcStatus(in.getFcStatus());
+		cabecero.setFiFechaOperacion(in.getFiFechaOperacion());
+		cabecero.setFiFolio(in.getFiFolio());
+		cabecero.setFiMonto(in.getFiMonto());
+		cabecero.setFiTipoPago(in.getFiTipoPago());
+		
+		cabecero.setIdTransaccion(in.getIdTransaccion());
+		cabecero.setFkIdConciliacion(in.getFkIdConciliacion());
+		return cabecero;
 	}
 	
 }

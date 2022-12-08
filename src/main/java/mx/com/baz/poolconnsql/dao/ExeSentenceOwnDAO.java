@@ -180,7 +180,7 @@ public class ExeSentenceOwnDAO {
 		          ps.setInt(10, dto.getFiOrigenInfo());
 		        });	
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("saveLecturaTranBatch: ", e);
 			return false;
 		}
@@ -198,7 +198,7 @@ public class ExeSentenceOwnDAO {
 		          ps.setInt(2, dto.getPkIdTransaccion());
 		        });	
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("updateLecturaTranBatch: ", e);
 			return false;
 		}
