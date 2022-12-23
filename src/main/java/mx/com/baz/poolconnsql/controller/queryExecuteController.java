@@ -137,10 +137,6 @@ public class queryExecuteController {
 		log.info("SE INICIALIZA EL ENDPOINT DE CONSULTAS DE getTcLecturaTran");
 		log.info(SEPARADOR);
 		
-		
-		
-		
-		
 		GenericResponse<List<mx.com.baz.model.Cabecero>> response = new GenericResponse<>(200, "consulta correcta", service.getTcLecturaTran(request.getIdConciliacion()));
 		
 		log.info(SEPARADOR);

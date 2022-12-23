@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TcLecturaTrans {
 	private Integer pkIdTransaccion;
+
 	private String fcParseo;
 	private String fcResultado;
 	private String fcNombre;
@@ -20,6 +21,8 @@ public class TcLecturaTrans {
 	private String fcUsrModif;
 	private Date fdFecModif;
 	private Date fdFecAlta;
+	private String fcConciliaUnion;
+	private Double fiMonto;
 	
 	private Integer fiOrigenInfo;
 }

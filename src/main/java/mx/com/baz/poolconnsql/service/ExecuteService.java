@@ -181,7 +181,7 @@ public class ExecuteService implements IExecuteService {
 	
 	public List<Cabecero> getTcLecturaTran(Integer idConciliacion){
 		ArrayList<?> lista = dao.getLecturaTrans(idConciliacion);
-		log.info("Se obtienen de getTcLecturaTran: "+lista.size());
+		log.debug("Se obtienen de getTcLecturaTran: "+lista.size());
 		Iterator<?> respuesta = lista.iterator();
 		
 		List<Cabecero> listaCabecero = new ArrayList<>();
@@ -195,19 +195,12 @@ public class ExecuteService implements IExecuteService {
 			Cabecero cabecero = convierteCabecero(cabeceroOracle);
 			cabecero.setIdTransaccion(Long.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
 			cabecero.setProcesado("N");
+			cabecero.setFcConciliaUnion(response.get("FCCONCILIAUNION"));
 			listaCabecero.add(cabecero);
-			
-//			TcLecturaTrans dto = new TcLecturaTrans();
-//			dto.setPkIdTransaccion(Integer.valueOf(String.valueOf(response.get("PKIDTRANSACCION"))));
-//			dto.setFcParseo(response.get("FCPARSEO"));
-//			dto.setFcResultado(response.get("FCRESULTADO"));
-//			dto.setFcNombre(response.get("FCNOMBRE"));
-//			dto.setFiEstatus(response.get("FIESTATUS") != null ? Integer.valueOf(String.valueOf(response.get("FIESTATUS"))):null);
-//			dto.setFkIdConciliacion(Integer.valueOf(String.valueOf(response.get("FKIDCONCILIACION"))));
-//			dto.setFcFase(response.get("FCFASE"));
-//			responseList.add(dto);
 		}
 		log.info("Datos preparados");
+		lista = null;
+		respuesta = null;
 		return listaCabecero;
 	}
 	

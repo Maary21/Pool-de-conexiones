@@ -33,5 +33,7 @@ public class Cabecero{
 	private Long idTransaccion;
 	private Integer fkIdConciliacion;
 	
+	private String fcConciliaUnion;
+	
 	
 }
